@@ -12,7 +12,7 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import { useEffect, useState } from "react";
 import { auth } from "./components/firebase";
-
+// import ResetPassword from "./components/resetpassword";
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,6 +62,16 @@ function App() {
                     user ? <Profile /> : <Navigate to="/login" replace />
                   }
                 />
+                {/* <Route
+                  path="/resetpassword"
+                  element={
+                    user ? (
+                      <Navigate to="/profile" replace />
+                    ) : (
+                      <ResetPassword />
+                    )
+                  }
+                /> */}
               </Routes>
               <ToastContainer />
             </div>

@@ -1,9 +1,10 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth } from "./firebase";
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,12 +13,32 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("user logged in Succesfully!!!");
+      console.log("User logged in successfully!");
       window.location.href = "/profile";
-      toast.success("User Registered Succesfully", { position: "top-center" });
+      toast.success("User logged in successfully!", { position: "top-center" });
     } catch (error) {
       console.error(error.message);
       toast.error(error.message, { position: "bottom-center" });
+    }
+  };
+
+  const handleReset = async () => {
+    if (!email) {
+      toast.error("Please enter your email to reset your password.", {
+        position: "top-center",
+      });
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Password reset email sent! Check your inbox.", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.message, {
+        position: "bottom-center",
+      });
     }
   };
 
@@ -86,8 +107,13 @@ const LoginPage = () => {
         </button>
       </div>
       <div>
+        <p onClick={handleReset} style={{ cursor: "pointer" }}>
+          Forgot Password?
+        </p>
+      </div>
+      <div>
         <p>
-          Dont&apos;t have an account{" "}
+          Don&apos;t have an account?{" "}
           <Link to="/register" style={{ textDecoration: "none" }}>
             Click here
           </Link>
